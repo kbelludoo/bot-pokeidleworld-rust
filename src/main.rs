@@ -64,9 +64,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let shared_bots = Arc::new(RwLock::new(bots));
 
     let port: u16 = std::env::var("PORT")
-        .unwrap_or_else(|_| "3007".to_string())
+        .unwrap_or_else(|_| "3012".to_string())
         .parse()
-        .unwrap_or(3007);
+        .unwrap_or(3012);
 
     // Servidor de Telemetria HTTP (/api/status)
     let bots_filter = {
