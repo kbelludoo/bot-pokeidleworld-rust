@@ -323,11 +323,12 @@ impl PokeIdleWorldBot {
             }
         });
 
-        // Loop de Watchdog de Caça (a cada 4s)
+        // Loop de Watchdog de Caça com Jitter Orgânico (3.2s - 4.8s)
         let bot_watchdog = self.clone();
         tokio::spawn(async move {
             loop {
-                tokio::time::sleep(Duration::from_secs(4)).await;
+                let jitter = 0.8 + rand::random::<f64>() * 0.4;
+                tokio::time::sleep(Duration::from_secs_f64(4.0 * jitter)).await;
                 let should_enter = {
                     let st = bot_watchdog.state.read().await;
                     !st.is_hunting && st.status != "Desconectado" && st.status != "Aguardando token..."
@@ -340,11 +341,12 @@ impl PokeIdleWorldBot {
             }
         });
 
-        // Loop de Recompensas Diárias (a cada 30 min)
+        // Loop de Recompensas Diárias com Jitter (25m - 35m)
         let bot_daily = self.clone();
         tokio::spawn(async move {
             loop {
-                tokio::time::sleep(Duration::from_secs(1800)).await;
+                let daily_jitter = 0.85 + rand::random::<f64>() * 0.3;
+                tokio::time::sleep(Duration::from_secs_f64(1800.0 * daily_jitter)).await;
                 let _ = bot_daily.client.claim_daily().await;
             }
         });
